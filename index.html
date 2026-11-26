@@ -112,10 +112,10 @@ textarea.say{width:100%;border:none;background:transparent;outline:none;resize:n
 
 <section id="lock" class="lock">
   <h1>다희의 그림일기</h1>
-  <p>PIN 4~6자리를 넣으면 일기장이 열려요</p>
+  <p>비밀번호를 넣으면 일기장이 열려요</p>
   <input id="pin" class="pin" type="password" placeholder="••••">
   <input id="pin2" class="pin hidden" type="password" placeholder="한 번 더">
-  <div id="lockTokWrap" class="hidden"><div class="note">데이터 저장소 토큰을 입력해야 열 수 있어요 (이 폰에 PIN으로 잠가 저장돼요)</div><input id="lockTok" class="pin" style="font-size:14px" type="password" placeholder="데이터 저장소 토큰"></div>
+  <div id="lockTokWrap" class="hidden"><div class="note">데이터 저장소 토큰을 입력해야 열 수 있어요 (이 폰에 비밀번호로 잠가 저장돼요)</div><input id="lockTok" class="pin" style="font-size:14px" type="password" placeholder="데이터 저장소 토큰"></div>
   <button class="lbtn" id="unlockBtn">열기</button>
   <div class="msg" id="lockNote"></div>
   <div><button class="reset" id="resetBtn">이 폰의 잠금 초기화</button></div>
@@ -168,11 +168,11 @@ textarea.say{width:100%;border:none;background:transparent;outline:none;resize:n
 <div id="settings" class="sheet hidden"><div class="box">
   <button class="xbtn" id="setClose">닫기</button>
   <h2>설정</h2>
-  <div class="note">제미나이 API 키: Google AI Studio에서 키를 만들어 붙여 넣어요. 이 폰에만 저장되고 PIN으로 잠가요.</div>
+  <div class="note">제미나이 API 키: Google AI Studio에서 키를 만들어 붙여 넣어요. 이 폰에만 저장되고 비밀번호로 잠가요.</div>
   <input id="geminiKey" class="field" type="password" placeholder="제미나이 API 키">
-  <div class="note">GitHub 토큰: 데이터 저장소(my-picture-diary-data) 하나만 고르고 Contents 읽기/쓰기 권한만 준 토큰을 넣어요. 이 폰에만 저장되고 PIN으로 잠가요.</div>
+  <div class="note">GitHub 토큰: 데이터 저장소(my-picture-diary-data) 하나만 고르고 Contents 읽기/쓰기 권한만 준 토큰을 넣어요. 이 폰에만 저장되고 비밀번호로 잠가요.</div>
   <input id="ghToken" class="field" type="password" placeholder="GitHub 토큰">
-  <button class="setbtn" id="setSave">PIN으로 잠가 저장</button>
+  <button class="setbtn" id="setSave">비밀번호로 잠가 저장</button>
   <div class="msg" id="setMsg"></div>
 </div></div>
 
@@ -445,7 +445,7 @@ async function unlock() {
         if ($('pin2').classList.contains('hidden')) {
           $('pin2').classList.remove('hidden');
           PIN_IN_MEM = null;
-          $('lockNote').textContent = '처음이에요. 사용할 PIN을 한 번 더 입력해 주세요';
+          $('lockNote').textContent = '처음이에요. 사용할 비밀번호를 한 번 더 입력해 주세요';
           return;
         }
         if ($('pin2').value.trim() !== pin) { PIN_IN_MEM = null; $('lockNote').textContent = '두 번이 달라요'; return; }
@@ -454,7 +454,7 @@ async function unlock() {
       KEY = null; INDEX = {}; $('lockNote').textContent = '';
       await persistTok(typedTok);
       enterApp();
-      msg('PIN 설정 대기 중이에요. 처음 저장할 때 이 PIN으로 잠가요.');
+      msg('비밀번호 설정 대기 중이에요. 처음 저장할 때 이 비밀번호로 잠가요.');
       $('diaryMsg').style.fontSize = '12px';
       return;
     }
@@ -593,7 +593,7 @@ $('btnTeacher').onclick = async () => {
   if (!text) { msg('일기를 먼저 적어 주세요'); return; }
   if (DEMO) { msg('데모에서는 선생님 글을 새로 쓰지 않아요'); return; }
   const sec = await loadSecrets();
-  if (sec.bad) { msg('설정에서 키를 다시 넣어 주세요(PIN이 달라졌을 수 있어요)'); return; }
+  if (sec.bad) { msg('설정에서 키를 다시 넣어 주세요(비밀번호가 달라졌을 수 있어요)'); return; }
   if (!sec.g) { msg('제미나이 키가 없어요. 설정에서 넣어 주세요.'); return; }
   msg('선생님이 읽고 있어요...');
   try {
@@ -612,10 +612,10 @@ async function saveDiary(withImg) {
   const body = $('body').value.trim();
   if (!body) { msg('일기를 먼저 적어 주세요'); return; }
   const sec = await loadSecrets();
-  if (sec.bad) { msg('설정에서 키를 다시 넣어 주세요(PIN이 달라졌을 수 있어요)'); return; }
+  if (sec.bad) { msg('설정에서 키를 다시 넣어 주세요(비밀번호가 달라졌을 수 있어요)'); return; }
   if (sec.t) GH_TOKEN = sec.t;
   if (!sec.t) { msg('GitHub 토큰이 없어요. 설정에서 넣어 주세요.'); return; }
-  if (!PIN_IN_MEM) { msg('PIN을 다시 열어 주세요'); return; }
+  if (!PIN_IN_MEM) { msg('비밀번호를 다시 열어 주세요'); return; }
   const key = cur;
   msg('저장 중이에요...');
   try {
@@ -626,7 +626,7 @@ async function saveDiary(withImg) {
       await ghPut('data/salt.json', JSON.stringify(SALT), sec.t, await ghSha('data/salt.json', sec.t));
       await ghPut('data/check.enc.json', JSON.stringify(await encJSON({ ok: 1 })), sec.t, await ghSha('data/check.enc.json', sec.t));
     }
-    if (!KEY) { msg('PIN을 다시 열어 주세요'); return; }
+    if (!KEY) { msg('비밀번호를 다시 열어 주세요'); return; }
     const title = $('dTitle').value.trim();
     const p = { title, body, img: withImg ? picData : null, teacher: $('teacherSay').value.trim() || '', weather };
     let thumb = '';
@@ -797,24 +797,24 @@ $('gearBtn').onclick = async () => {
   const s = await loadSecrets();
   $('geminiKey').value = s.g || '';
   $('ghToken').value = s.t || '';
-  $('setMsg').textContent = PIN_IN_MEM ? '' : 'PIN을 먼저 열어 주세요';
+  $('setMsg').textContent = PIN_IN_MEM ? '' : '비밀번호를 먼저 열어 주세요';
 };
 $('setClose').onclick = () => $('settings').classList.add('hidden');
 $('setSave').onclick = async () => {
-  if (!PIN_IN_MEM) { $('setMsg').textContent = 'PIN을 먼저 열어 주세요'; return; }
+  if (!PIN_IN_MEM) { $('setMsg').textContent = '비밀번호를 먼저 열어 주세요'; return; }
   await saveSecrets($('geminiKey').value.trim(), $('ghToken').value.trim());
   GH_TOKEN = $('ghToken').value.trim() || null;
   await saveLocalCheck(PIN_IN_MEM);
-  $('setMsg').textContent = 'PIN으로 잠가 이 폰에 저장했어요';
+  $('setMsg').textContent = '비밀번호로 잠가 이 폰에 저장했어요';
 };
 
 $('resetBtn').onclick = () => {
-  if (!window.confirm('이 폰에 저장된 키·토큰·PIN 확인값을 지울까요? 저장소의 일기는 그대로 남아요.')) return;
+  if (!window.confirm('이 폰에 저장된 키·토큰·비밀번호 확인값을 지울까요? 저장소의 일기는 그대로 남아요.')) return;
   localStorage.removeItem('diary_secrets');
   localStorage.removeItem('diary_local_check');
   PIN_IN_MEM = null;
   $('pin').value = ''; $('pin2').value = ''; $('pin2').classList.add('hidden');
-  $('lockNote').textContent = '이 폰의 잠금 정보를 지웠어요. 다시 PIN을 정해 주세요';
+  $('lockNote').textContent = '이 폰의 잠금 정보를 지웠어요. 다시 비밀번호를 정해 주세요';
 };
 $('unlockBtn').onclick = unlock;
 $('pin').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
@@ -843,7 +843,7 @@ function setApply(on) { $('rkApply').disabled = !on; }
 function fail(code) { const e = new Error(code); e.code = code; return e; }
 function errText(e) {
   const c = e && e.code;
-  if (c === 'pin') return '현재 PIN이 맞지 않아요. 아무것도 바꾸지 않았어요.';
+  if (c === 'pin') return '현재 비밀번호가 맞지 않아요. 아무것도 바꾸지 않았어요.';
   if (c === 'stale') return '저장소가 그 사이 바뀌었어요. 확인만 하기를 다시 눌러 주세요. 아무것도 올리지 않았어요.';
   if (c === 'decrypt') return '일부 기록을 풀 수 없어요. 중단했고 아무것도 올리지 않았어요.';
   if (c === 'missing') return '저장소 데이터 파일이 없어요. 중단했어요.';
@@ -972,16 +972,16 @@ async function dryRun() {
   PLAN = null; setApply(false);
   const oldPin = $('rkOld').value.trim();
   const n1 = $('rkNew1').value, n2 = $('rkNew2').value;
-  if (oldPin.length < 4) return say('현재 PIN 을 넣어 주세요');
+  if (oldPin.length < 4) return say('현재 비밀번호를 넣어 주세요');
   if (n1.length < MIN_NEW) return say('새 암호는 12자 이상이어야 해요');
   if (n1 !== n2) return say('새 암호 두 번이 달라요');
-  if (n1 === oldPin) return say('새 암호가 현재 PIN과 같아요');
+  if (n1 === oldPin) return say('새 암호가 현재 비밀번호와 같아요');
   say('확인하고 있어요... (저장소는 건드리지 않아요)');
   try {
     PLAN = await buildPlan(oldPin, n1);
     const c = PLAN.counts;
     let t = '확인 통과. 항목 ' + c.index + '개, 기록 ' + c.entries + '개, 파일 ' + c.files + '개를 새 암호로 다시 잠글 수 있어요. 저장소는 아직 건드리지 않았어요.';
-    if (!PLAN.secretsOk) t += '\n저장된 키·토큰은 옛 PIN으로 풀리지 않아요. 적용 후 다시 입력해 주세요.';
+    if (!PLAN.secretsOk) t += '\n저장된 키·토큰은 옛 비밀번호로 풀리지 않아요. 적용 후 다시 입력해 주세요.';
     if (!PLAN.token) t += '\nGitHub 토큰이 저장돼 있지 않아요. 아래 칸에 넣어 주세요.';
     $('rkTokWrap').style.display = PLAN.token ? 'none' : 'block';
     say(t);
@@ -1050,8 +1050,8 @@ function inject() {
   wrap.style.marginTop = '24px';
   wrap.innerHTML =
     '<h3>암호 변경</h3>' +
-    '<div class="note">현재 PIN과 새 암호(12자 이상)를 넣어요. 먼저 확인만 하기로 검사하고, 통과하면 적용을 눌러요.</div>' +
-    '<input id="rkOld" class="field" type="password" placeholder="현재 PIN">' +
+    '<div class="note">현재 비밀번호와 새 암호(12자 이상)를 넣어요. 먼저 확인만 하기로 검사하고, 통과하면 적용을 눌러요.</div>' +
+    '<input id="rkOld" class="field" type="password" placeholder="현재 비밀번호">' +
     '<input id="rkNew1" class="field" type="password" placeholder="새 암호 (12자 이상)">' +
     '<input id="rkNew2" class="field" type="password" placeholder="새 암호 한 번 더">' +
     '<div id="rkTokWrap" style="display:none"><input id="rkTok" class="field" type="password" placeholder="GitHub 토큰"></div>' +
