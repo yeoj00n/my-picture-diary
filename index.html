@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#fffef8">
+<title>다희의 그림일기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="다희의 그림일기">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+:root{color-scheme:light;--ink:#5b4b63;--soft:#9a8ba6;--red:#e2473c;--line:#e7dccb;--rule:#dfe9f2;--paper:#fffef8;--bg:#fffef8}
+*{box-sizing:border-box;border-radius:0;box-shadow:none}
+html{background:var(--bg);color-scheme:light}
+body{margin:0 auto;max-width:430px;min-height:100vh;padding:0 0 72px;background:var(--bg);color:var(--ink);font-family:'Gowun Dodum',system-ui,sans-serif;font-size:16px;letter-spacing:0;line-height:1.5}
+button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none;-webkit-tap-highlight-color:transparent}
+input,textarea{font-family:inherit;color:inherit}
+.hidden{display:none!important}
+.lock{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px;text-align:center}
+.lock h1{font-size:20px;margin:0 0 6px;font-weight:400}
+.lock p{font-size:14px;margin:4px 0 14px;color:var(--soft)}
+.pin{width:200px;font-size:24px;text-align:center;letter-spacing:6px;border:none;border-bottom:1px solid var(--line);background:transparent;padding:6px;outline:none;margin-bottom:14px}
+.lbtn{font-size:15px;padding:8px 14px;border-bottom:1px solid var(--ink)}
+.msg{font-size:13px;min-height:20px;margin:8px 0 0;text-align:left;color:var(--ink)}
+.demo{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;text-align:center;background:#fff3c4;font-size:12px;padding:3px;z-index:30;color:var(--ink)}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px 10px;border-bottom:1px solid var(--line)}
+.top .ttl{font-size:15px}
+.top .ttl small{font-size:12px;color:var(--soft);margin-left:6px}
+.top .gear{font-size:13px;color:var(--soft)}
+.stat{font-size:13px;color:var(--soft);padding:8px 18px 0}
+main{padding:0 18px 24px}
+.q{font-size:13px;color:var(--soft);padding:14px 0 10px;line-height:1.5}
+.q b{font-weight:400;color:var(--ink)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:6px 0 10px;border-bottom:1px solid var(--line)}
+.row label{font-size:15px;white-space:nowrap}
+input.date{border:none;border-bottom:1px solid var(--line);background:transparent;font-size:15px;padding:4px 2px;outline:none;width:150px}
+.wx{display:flex;gap:4px}
+.wbtn{font-size:18px;padding:2px 3px;border-bottom:2px solid transparent;line-height:1.2}
+.wbtn.on{border-bottom-color:var(--ink)}
+.titlerow{display:flex;align-items:center;gap:8px;padding:12px 0;border-bottom:1px solid var(--line)}
+.titlerow label{font-size:15px;white-space:nowrap}
+input.title{flex:1;border:none;background:transparent;font-size:16px;padding:2px 0;outline:none}
+.pic{min-height:200px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--soft);font-size:13px;padding:14px 0}
+.pic img{width:100%;height:auto;display:block;max-height:420px;object-fit:contain}
+textarea.body{display:block;width:100%;min-height:260px;border:none;outline:none;resize:vertical;padding:0;margin-top:8px;background-color:transparent;background-image:repeating-linear-gradient(to bottom,transparent 0 31px,var(--rule) 31px 32px);background-attachment:local;font-size:17px;line-height:32px;text-align:left;color:var(--ink)}
+.say{margin-top:14px;padding-top:10px;border-top:1px solid var(--line);font-size:14px;color:var(--red);text-align:left;min-height:0}
+textarea.say{width:100%;border:none;background:transparent;outline:none;resize:none;line-height:1.5;margin-top:0;padding-top:6px}
+.saywrap{margin-top:20px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.saylabel{font-size:13px;color:var(--soft);margin-bottom:2px}
+.actions{display:flex;gap:6px;margin-top:18px}
+.actions button{flex:1 1 0;min-width:0;font-size:15px;padding:12px 2px;border-bottom:1px solid var(--line);white-space:nowrap}
+.actions button.primary{border-bottom-color:var(--ink);font-weight:700}
+.note{font-size:13px;border-top:1px solid var(--line);padding-top:8px;margin-top:10px;text-align:left}
+.note button{font-size:13px;border-bottom:1px solid var(--ink);margin-top:6px}
+.cal{padding-top:10px}
+.calhead{display:flex;justify-content:space-between;align-items:center;font-size:16px;padding:6px 0 12px;border-bottom:1px solid var(--line)}
+.calhead button{font-size:14px;padding:4px 8px}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0;margin-top:6px}
+.dow{text-align:center;font-size:12px;color:var(--soft);padding:6px 0}
+.dow.sun{color:var(--red)}
+.day{position:relative;text-align:center;font-size:15px;padding:10px 0 12px;background:none;border:none}
+.day.has::after{content:"";position:absolute;left:50%;bottom:3px;width:5px;height:5px;margin-left:-2.5px;background:var(--ink);border-radius:50%}
+.day.today{font-weight:700;text-decoration:underline}
+.grapes{margin-top:18px;border-top:1px solid var(--line);padding-top:12px;font-size:13px}
+.bunch{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.grape{width:9px;height:9px;border-radius:50%;background:#e6e0ee}
+.grape.on{background:#9b6bd6}
+.card{padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.card .d{font-size:12px;color:var(--soft)}
+.card .s{font-size:16px;margin:2px 0}
+.card .t{font-size:13px;color:var(--red)}
+.hint{text-align:left;color:var(--soft);font-size:14px;padding-top:24px}
+.bar{position:fixed;bottom:0;left:0;right:0;margin:0 auto;max-width:430px;display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--paper);border-top:1px solid var(--line);z-index:5}
+.bar button{padding:12px 2px 12px;font-size:14px;color:var(--soft);border-top:2px solid transparent;margin-top:-1px}
+.bar button.on{color:var(--ink);border-top-color:var(--ink)}
+.sheet{position:fixed;inset:0;background:rgba(91,75,99,.25);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet .box{background:var(--paper);width:100%;max-width:430px;max-height:90vh;overflow:auto;padding:14px 18px 24px;border-top:1px solid var(--line)}
+.sheet h2{font-size:16px;font-weight:400;margin:4px 0 10px}
+.xbtn{float:right;font-size:13px;padding:4px 0;border-bottom:1px solid var(--ink)}
+.pp .dt{font-size:14px;color:var(--soft);padding:6px 0 10px;border-bottom:1px solid var(--line)}
+.pp .pimg{border-bottom:1px solid var(--line);padding:10px 0;text-align:center;font-size:13px;color:var(--soft);min-height:120px;display:flex;align-items:center;justify-content:center}
+.pp .pimg img{width:100%;height:auto;display:block}
+.pp .ro{white-space:pre-wrap;font-size:17px;line-height:32px;margin-top:8px;text-align:left}
+.pp .say{margin-top:12px}
+.pp .pact{margin-top:14px;text-align:left}
+.pp .pact button{font-size:14px;border-bottom:1px solid var(--ink);padding:4px 0}
+.field{width:100%;padding:8px 0;border:none;border-bottom:1px solid var(--line);font-size:15px;margin:4px 0 14px;background:transparent;outline:none}
+.setbtn{font-size:14px;border-bottom:1px solid var(--ink);padding:4px 0;margin-top:6px}
+.reset{font-size:12px;color:var(--soft);margin-top:16px;border-bottom:1px solid var(--soft);padding:2px 0}
+.daytabs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 0;border-bottom:1px solid var(--line)}
+.daytabs button{font-size:13px;padding:2px 6px;color:var(--soft);border-bottom:1px solid transparent}
+.daytabs button.on{color:var(--ink);border-bottom-color:var(--ink)}
+.card{display:flex;gap:12px;align-items:center}
+.card .th{flex:0 0 56px;width:56px;height:56px;border:1px solid var(--line);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.card .th:empty{display:none}
+.card .th img{width:100%;height:100%;object-fit:cover;display:block}
+.card .ct{flex:1;min-width:0;overflow-wrap:anywhere}
+.pp .pact button{margin-right:14px}
+.pp .pact button.on{font-weight:700}
+</style>
+</head>
+<body>
+<div id="demoBar" class="demo hidden">데모 모드 · 가짜 샘플 일기예요 (저장되지 않아요)</div>
+
+<section id="lock" class="lock">
+  <h1>다희의 그림일기</h1>
+  <p>PIN 4~6자리를 넣으면 일기장이 열려요</p>
+  <input id="pin" class="pin" type="password" placeholder="••••">
+  <input id="pin2" class="pin hidden" type="password" placeholder="한 번 더">
+  <div id="lockTokWrap" class="hidden"><div class="note">데이터 저장소 토큰을 입력해야 열 수 있어요 (이 폰에 PIN으로 잠가 저장돼요)</div><input id="lockTok" class="pin" style="font-size:14px" type="password" placeholder="데이터 저장소 토큰"></div>
+  <button class="lbtn" id="unlockBtn">열기</button>
+  <div class="msg" id="lockNote"></div>
+  <div><button class="reset" id="resetBtn">이 폰의 잠금 초기화</button></div>
+</section>
+
+<div id="app" class="hidden">
+  <header class="top">
+    <div class="ttl" id="bigDate"></div>
+    <button class="gear" id="gearBtn">설정</button>
+  </header>
+  <div class="stat" id="meta"></div>
+  <main>
+    <section id="tab-diary">
+      <div class="q">선생님의 오늘의 질문 · <b id="question"></b></div>
+      <div class="row">
+        <div><label>날짜:</label> <input id="dDate" class="date" type="date"></div>
+        <div class="wx" id="weatherStamps"></div>
+      </div>
+      <div class="daytabs" id="dayTabs"></div>
+      <div class="titlerow"><label>제목:</label><input id="dTitle" class="title" type="text" placeholder="한 줄 제목"></div>
+      <div class="pic" id="picBox"></div>
+      <textarea id="body" class="body" placeholder="오늘 있었던 일을 적어 봐요"></textarea>
+      <div class="saywrap"><div class="saylabel">선생님 한줄평</div><textarea id="teacherSay" class="say" rows="2" placeholder="선생님 한 줄평을 직접 적어 보세요"></textarea></div>
+      <div class="actions">
+        <button id="btnPaint">그림올리기</button>
+        <button id="btnTeacher">검사받기</button>
+        <button id="btnSave" class="primary">저장하기</button>
+      </div>
+      <div class="msg" id="diaryMsg"></div>
+      <input type="file" id="picFile" accept="image/*" class="hidden">
+    </section>
+    <section id="tab-cal" class="hidden">
+      <div class="cal">
+        <div class="calhead"><button id="prevM">이전</button><span id="monthTitle"></span><button id="nextM">다음</button></div>
+        <div class="grid" id="calGrid"></div>
+      </div>
+      <div class="grapes"><div id="grapeCnt"></div><div class="bunch" id="bunch"></div></div>
+    </section>
+    <section id="tab-hall" class="hidden"><div id="hallList"></div></section>
+  </main>
+  <nav class="bar">
+    <button id="t1" class="on">오늘의 일기</button>
+    <button id="t2">스티커 달력</button>
+    <button id="t3">한 줄 복도</button>
+  </nav>
+</div>
+
+<div id="popup" class="sheet hidden"><div class="box"><button class="xbtn" id="popClose">닫기</button><div id="popBody"></div></div></div>
+
+<div id="settings" class="sheet hidden"><div class="box">
+  <button class="xbtn" id="setClose">닫기</button>
+  <h2>설정</h2>
+  <div class="note">제미나이 API 키: Google AI Studio에서 키를 만들어 붙여 넣어요. 이 폰에만 저장되고 PIN으로 잠가요.</div>
+  <input id="geminiKey" class="field" type="password" placeholder="제미나이 API 키">
+  <div class="note">GitHub 토큰: 데이터 저장소(my-picture-diary-data) 하나만 고르고 Contents 읽기/쓰기 권한만 준 토큰을 넣어요. 이 폰에만 저장되고 PIN으로 잠가요.</div>
+  <input id="ghToken" class="field" type="password" placeholder="GitHub 토큰">
+  <button class="setbtn" id="setSave">PIN으로 잠가 저장</button>
+  <div class="msg" id="setMsg"></div>
+</div></div>
+
+<script>
+(() => {
+'use strict';
+// 데이터 저장소(비공개): data/ 의 암호 파일만 있어요. 사이트 코드는 공개 저장소 my-picture-diary 에 있어요.
+const REPO = { owner: 'yeoj00n', name: 'my-picture-diary-data', branch: 'main' };
+const DEMO = new URLSearchParams(location.search).get('demo') === '1';
+const PBKDF2_ITER = 200000;
+const QUESTIONS = ['다희야, 오늘 제일 크게 웃었던 순간은 언제야?','오늘 누구에게 고마운 마음이 들었어?','오늘 새로 알게 된 것이 있다면 무엇이야?','오늘 가장 맛있었던 음식은 뭐였어?','친구와 재미있게 놀았던 일이 있었어?','오늘 날씨를 보고 어떤 기분이 들었어?','오늘 내가 스스로 뿌듯했던 일은 뭐야?','요즘 가장 좋아하는 놀이는 무엇이야?','오늘 마음이 조금 속상했던 순간은 언제였어?','오늘 하늘을 봤다면 어떤 색이었어?','집에서 가장 편안했던 시간은 언제였어?','오늘 배운 것을 누군가에게 알려준다면 무엇을 말해줄래?','내일 꼭 해보고 싶은 일이 있다면?','오늘 내 몸에서 자랑하고 싶은 부분은 어디야?','오늘 동물이나 식물을 보았다면 어땠어?','오늘 소리로 기억에 남는 것이 있어?','오늘 가장 오래 생각난 장면은 무엇이야?','오늘 나를 웃게 한 말 한마디는?','오늘 엄마나 아빠에게 해주고 싶은 말이 있어?','오늘 하루를 색깔 하나로 표현한다면?','오늘 가장 용감했던 순간은 언제야?','오늘 기다렸던 일이 있었다면 무엇이었어?'];
+const WEATHER = [['맑음','☀️'],['구름','☁️'],['비','🌧️'],['눈','❄️'],['바람','🍃'],['무지개','🌈']];
+
+const $ = id => document.getElementById(id);
+const enc = new TextEncoder(), dec = new TextDecoder();
+const b64 = buf => { const u = new Uint8Array(buf); let s = ''; for (let i = 0; i < u.length; i++) s += String.fromCharCode(u[i]); return btoa(s); };
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const utf8b64 = s => b64(enc.encode(s));
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const dayNum = s => { const p = s.split('-').map(Number); return Math.floor(Date.UTC(p[0], p[1] - 1, p[2]) / 86400000); };
+const daysIn = (y, m) => new Date(y, m + 1, 0).getDate();
+const msg = t => { $('diaryMsg').textContent = t; };
+const qOf = s => { const n = QUESTIONS.length; return QUESTIONS[((dayNum(s) % n) + n) % n]; };
+const firstLine = b => String(b).split('\n')[0].slice(0, 30);
+const dateOf = k => String(k).slice(0, 10);
+const sufOf = k => { const m = String(k).match(/_(\d+)$/); return m ? parseInt(m[1], 10) : 1; };
+const keysOf = d => Object.keys(INDEX).filter(k => dateOf(k) === d).sort((a, b) => sufOf(a) - sufOf(b));
+const nextKey = d => { if (!INDEX[d]) return d; for (let n = 2; ; n++) { if (!INDEX[d + '_' + n]) return d + '_' + n; } };
+
+let KEY = null, SALT = null, PIN_IN_MEM = null, INDEX = {}, ENTRY = {}, cur = ymd(new Date());
+let GH_TOKEN = null;
+let calY = new Date().getFullYear(), calM = new Date().getMonth();
+let picData = null, weather = null;
+
+async function deriveKey(pin, salt) {
+  const base = await crypto.subtle.importKey('raw', enc.encode(pin), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: PBKDF2_ITER, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+async function encJSON(obj) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, KEY, enc.encode(JSON.stringify(obj)));
+  return { v: 1, iv: b64(iv), ct: b64(ct) };
+}
+async function decJSON(box) {
+  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(box.iv) }, KEY, unb64(box.ct));
+  return JSON.parse(dec.decode(pt));
+}
+async function saveSecrets(g, t) {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const k = await deriveKey(PIN_IN_MEM, salt);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, k, enc.encode(JSON.stringify({ g, t })));
+  localStorage.setItem('diary_secrets', JSON.stringify({ salt: b64(salt), iv: b64(iv), ct: b64(ct) }));
+}
+async function loadSecrets() {
+  const raw = localStorage.getItem('diary_secrets');
+  if (!raw || !PIN_IN_MEM) return { g: '', t: '' };
+  try {
+    const o = JSON.parse(raw);
+    const k = await deriveKey(PIN_IN_MEM, unb64(o.salt));
+    const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(o.iv) }, k, unb64(o.ct));
+    return JSON.parse(dec.decode(pt));
+  } catch (e) { return { g: '', t: '', bad: true }; }
+}
+
+const GH_API = 'https://api.github.com/repos/' + REPO.owner + '/' + REPO.name + '/contents/';
+async function ghFetch(path, opts, token) {
+  return fetch(GH_API + path, Object.assign({}, opts, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' } }));
+}
+async function ghSha(path, token) {
+  const r = await ghFetch(path + '?ref=' + REPO.branch, {}, token);
+  if (r.status === 404) return undefined;
+  if (!r.ok) throw new Error('get ' + r.status);
+  return (await r.json()).sha;
+}
+async function ghPut(path, text, token, sha) {
+  const body = { message: 'diary: ' + path, content: utf8b64(text), branch: REPO.branch };
+  if (sha) body.sha = sha;
+  const r = await ghFetch(path, { method: 'PUT', body: JSON.stringify(body) }, token);
+  if (!r.ok) throw new Error('put ' + r.status);
+}
+async function loadRepoJSON(path) {
+  // 비공개 저장소라 raw.githubusercontent.com 이 안 돼요: 토큰을 붙여 API 의 raw 응답을 받아요
+  if (!GH_TOKEN) throw new Error('no-token');
+  const r = await fetch(GH_API + path + '?ref=' + REPO.branch, { cache: 'no-store', headers: { 'Authorization': 'Bearer ' + GH_TOKEN, 'Accept': 'application/vnd.github.raw+json' } });
+  if (r.status === 404) return null;
+  if (r.status === 401 || r.status === 403) { REPO_AUTH_BAD = true; return null; }
+  if (!r.ok) throw new Error('get ' + r.status);
+  return r.json();
+}
+async function persistTok(typed) {
+  // 입력한 데이터 저장소 토큰을 PIN으로 잠가 이 폰에 저장(PIN 확인이 끝난 뒤에만)
+  if (!typed) return;
+  const s1 = await loadSecrets();
+  await saveSecrets(s1.g || '', typed);
+}
+
+async function gemini(model, body, key) {
+  const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key }, body: JSON.stringify(body) });
+  if (!r.ok) {
+    let detail = '';
+    try { const j = await r.json(); detail = String((j.error && j.error.message) || '').split(key).join('').slice(0, 80); } catch (e) {}
+    const err = new Error('gemini'); err.status = r.status; err.detail = detail; throw err;
+  }
+  return r.json();
+}
+class ModelErr extends Error { constructor(status, detail, model) { super('gemini'); this.status = status; this.detail = detail; this.model = model; } }
+const MODEL_TTL = 24 * 3600 * 1000;
+function getModelCache() { try { const o = JSON.parse(localStorage.getItem('diary_model_cache') || 'null'); return o && Date.now() - o.at < MODEL_TTL ? o : null; } catch (e) { return null; } }
+function setModelCache(patch) { const o = Object.assign({ at: Date.now() }, getModelCache() || {}, patch); localStorage.setItem('diary_model_cache', JSON.stringify(o)); }
+async function listModels(key) {
+  const c = getModelCache();
+  if (c && c.list) return c.list;
+  const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200', { headers: { 'x-goog-api-key': key } });
+  if (!r.ok) throw new ModelErr(r.status, '', 'list');
+  const j = await r.json();
+  const list = (j.models || []).filter(m => (m.supportedGenerationMethods || []).includes('generateContent')).map(m => m.name.replace(/^models\//, ''));
+  setModelCache({ list, at: Date.now() });
+  return list;
+}
+function verOf(n) { const m = n.match(/(\d+(?:\.\d+)?)/); return m ? parseFloat(m[1]) : 0; }
+function pickText(list) {
+  const bad = /image|tts|embedding|live|audio|thinking|exp|vision|native|robotics|learnlm|computer|imagen|veo|aqa/;
+  const ok = list.filter(n => /flash/.test(n) && !bad.test(n));
+  ok.sort((a, b) => { const la = /lite/.test(a) ? 1 : 0, lb = /lite/.test(b) ? 1 : 0; if (la !== lb) return la - lb; return verOf(b) - verOf(a); });
+  return ok.slice(0, 3);
+}
+async function gemini(model, body, key, opt) {
+  const ac = new AbortController();
+  const timer = setTimeout(() => ac.abort(), 15000);
+  try {
+    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent', { method: 'POST', signal: ac.signal, headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key }, body: JSON.stringify(body) });
+    if (!r.ok) {
+      let detail = '';
+      try { const j = await r.json(); detail = String((j.error && j.error.message) || '').split(key).join('').slice(0, 80); } catch (e) {}
+      throw new ModelErr(r.status, detail, model);
+    }
+    return await r.json();
+  } catch (e) {
+    if (e instanceof ModelErr) throw e;
+    if (e && e.name === 'AbortError') throw new ModelErr(408, '15초 안에 답이 없었어요', model);
+    throw new ModelErr(0, '', model);
+  } finally { clearTimeout(timer); }
+}
+// 앞 모델이 429/404/5xx일 때만 다음으로 넘어감
+const NEXT_OK = s => s === 429 || s === 404 || (s >= 500 && s < 600) || s === 408 || s === 0;
+async function callChain(names, makeBody, key, cacheKey) {
+  let last = null;
+  for (const m of names) {
+    try { const res = await gemini(m, makeBody(m), key); setModelCache({ [cacheKey]: m }); return res; }
+    catch (e) {
+      last = e;
+      if (e.status === 400 && cacheKey === 'text' && !makeBody.noThink) { /* retry without thinking config below */ }
+      if (!NEXT_OK(e.status)) break;
+    }
+  }
+  throw last;
+}
+function textBody(prompt, withThink) {
+  const gc = { maxOutputTokens: 100 };
+  if (withThink) gc.thinkingConfig = { thinkingBudget: 0 };
+  return { contents: [{ parts: [{ text: prompt }] }], generationConfig: gc };
+}
+async function geminiText(prompt, key) {
+  const c = getModelCache();
+  const cached = c && c.text;
+  let names;
+  if (cached) names = [cached];
+  else names = pickText(await listModels(key));
+  if (!names.length) throw new ModelErr(0, '', '없음');
+  try {
+    return await callChain(names, () => textBody(prompt, true), key, 'text');
+  } catch (e) {
+    if (cached) { setModelCache({ text: null, list: null }); return geminiText(prompt, key); }
+    if (e.status === 400) return await callChain(names, () => textBody(prompt, false), key, 'text');
+    throw e;
+  }
+}
+function explain(e, what) {
+  const s = e && e.status;
+  const m = e && e.model;
+  let t;
+  if (m === '없음') t = '이 키로 쓸 수 있는 글 모델이 없어요';
+  else if (m === 'list') t = (s === 400 || s === 401 || s === 403) ? '키가 맞지 않아요. 설정에서 키를 다시 넣어 주세요' : '모델 목록을 불러오지 못했어요';
+  else if (s === 400 || s === 401 || s === 403) t = '키가 맞지 않아요. 설정에서 키를 다시 넣어 주세요';
+  else if (s === 404) t = '이 모델은 쓸 수 없어요';
+  else if (s === 429) t = '오늘 사용량이 찼어요. 잠시 뒤 다시 해 봐요';
+  else if (e && e.message === 'noimg') t = what + ' 결과에 그림이 없었어요';
+  else if (e && e.message === 'empty') t = what + ' 결과가 비어 있었어요';
+  else t = '연결이 잘 안 됐어요';
+  const used = m && m !== 'list' && m.indexOf('없음') < 0 ? ' (사용한 모델: ' + m + ')' : '';
+  const code = s ? ' [' + s + (e.detail ? ': ' + e.detail : '') + ']' : '';
+  return t + used + code;
+}
+function shrinkDataUrl(src, maxW) {
+  return new Promise((res, rej) => {
+    const im = new Image();
+    im.onload = () => {
+      const k = Math.min(1, (maxW || 800) / im.width);
+      const c = document.createElement('canvas');
+      c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+      g.drawImage(im, 0, 0, c.width, c.height);
+      res(c.toDataURL('image/jpeg', 0.8));
+    };
+    im.onerror = rej;
+    im.src = src;
+  });
+}
+
+async function verifyLocal(pin, lcStr) {
+  try {
+    const o = JSON.parse(lcStr);
+    const k = await deriveKey(pin, unb64(o.salt));
+    const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(o.iv) }, k, unb64(o.ct));
+    return JSON.parse(dec.decode(pt)).ok === 'diary';
+  } catch (e) { return false; }
+}
+async function saveLocalCheck(pin) {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const k = await deriveKey(pin, salt);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, k, enc.encode(JSON.stringify({ ok: 'diary' })));
+  localStorage.setItem('diary_local_check', JSON.stringify({ salt: b64(salt), iv: b64(iv), ct: b64(ct) }));
+}
+function lockFail(t) { PIN_IN_MEM = null; KEY = null; $('lockNote').textContent = t; }
+let REPO_AUTH_BAD = false;
+async function unlock() {
+  REPO_AUTH_BAD = false;
+  const pin = $('pin').value.trim();
+  if (!/^.{4,64}$/.test(pin)) { $('lockNote').textContent = '4자 이상으로 넣어 주세요'; return; }
+  $('lockNote').textContent = '확인하고 있어요...';
+  const lc = localStorage.getItem('diary_local_check');
+  const hasSecrets = !!localStorage.getItem('diary_secrets');
+  PIN_IN_MEM = pin;
+  try {
+    if (lc) {
+      if (!(await verifyLocal(pin, lc))) { lockFail('앗, 비밀번호가 달라요 🥲'); return; }
+    } else if (hasSecrets) {
+      const s = await loadSecrets();
+      if (s.bad) { lockFail('앗, 비밀번호가 달라요 🥲'); return; }
+      if (s.t) GH_TOKEN = s.t;
+      await saveLocalCheck(pin);
+    }
+    if (!GH_TOKEN) { try { const s0 = await loadSecrets(); if (s0.t) GH_TOKEN = s0.t; } catch (e) {} }
+    const typedTok = ($('lockTok').value || '').trim();
+    if (typedTok) GH_TOKEN = typedTok;
+    if (!GH_TOKEN) { PIN_IN_MEM = null; $('lockTokWrap').classList.remove('hidden'); $('lockNote').textContent = '데이터 저장소 토큰을 입력해야 열 수 있어요. 토큰을 넣고 다시 열기를 눌러 주세요'; return; }
+    SALT = await loadRepoJSON('data/salt.json');
+    if (!SALT && REPO_AUTH_BAD) {
+      PIN_IN_MEM = null; KEY = null;
+      $('lockTokWrap').classList.remove('hidden');
+      $('lockNote').textContent = typedTok
+        ? '이 토큰으로는 my-picture-diary-data 를 읽을 수 없어요. 저장소 하나에만 Contents 읽기·쓰기를 준 토큰인지 확인해 주세요'
+        : '저장된 토큰으로는 새 저장소를 못 읽어요. 새 토큰(my-picture-diary-data 용)을 넣고 다시 열기를 눌러 주세요';
+      return;
+    }
+    if (!SALT && (lc || hasSecrets)) {
+      PIN_IN_MEM = null; KEY = null;
+      $('lockTokWrap').classList.remove('hidden');
+      $('lockNote').textContent = typedTok
+        ? '이 토큰으로는 my-picture-diary-data 를 읽을 수 없어요. 저장소 하나에만 Contents 읽기·쓰기를 준 토큰인지 확인해 주세요'
+        : '저장된 토큰으로는 새 저장소를 못 읽어요. 새 토큰(my-picture-diary-data 용)을 넣고 다시 열기를 눌러 주세요';
+      return;
+    }
+    if (!SALT) {
+      if (!lc && !hasSecrets) {
+        if ($('pin2').classList.contains('hidden')) {
+          $('pin2').classList.remove('hidden');
+          PIN_IN_MEM = null;
+          $('lockNote').textContent = '처음이에요. 사용할 PIN을 한 번 더 입력해 주세요';
+          return;
+        }
+        if ($('pin2').value.trim() !== pin) { PIN_IN_MEM = null; $('lockNote').textContent = '두 번이 달라요'; return; }
+        await saveLocalCheck(pin);
+      }
+      KEY = null; INDEX = {}; $('lockNote').textContent = '';
+      await persistTok(typedTok);
+      enterApp();
+      msg('PIN 설정 대기 중이에요. 처음 저장할 때 이 PIN으로 잠가요.');
+      $('diaryMsg').style.fontSize = '12px';
+      return;
+    }
+    KEY = await deriveKey(pin, unb64(SALT.salt));
+    const check = await loadRepoJSON('data/check.enc.json');
+    if (check) { try { await decJSON(check); } catch (e) { lockFail('앗, 비밀번호가 달라요 🥲'); return; } }
+    if (!lc && !hasSecrets) await saveLocalCheck(pin);
+    const idx = await loadRepoJSON('data/index.enc.json');
+    INDEX = idx ? await decJSON(idx) : {};
+    await persistTok(typedTok);
+    $('lockNote').textContent = '';
+    enterApp();
+  } catch (e) { lockFail('앗, 불러오기가 잘 안 됐어요. 잠시 후 다시 해 봐요'); }
+}
+function demoData() {
+  const t = new Date();
+  const at = off => ymd(new Date(t.getFullYear(), t.getMonth(), t.getDate() + off));
+  const S = [
+    [-12, '구름', '소풍 가서 김밥 먹기', '친구들과 돗자리에 앉아 김밥을 나눠 먹었다. 달걀말이가 제일 맛있었다.', '김밥처럼 알차고 든든한 하루였구나!'],
+    [-8, '바람', '연 날리기', '바람이 솔솔 불어서 연이 하늘 높이 올라갔다. 줄을 놓칠 뻔했다.', '하늘 높이 날린 연처럼 마음도 훨훨 날았겠구나.'],
+    [-3, '맑음', '맛있는 음식', '엄마랑 떡볶이를 먹었다. 치즈가 쭉쭉 늘어나서 웃겼다.', '맛있는 날엔 마음도 든든해지지요. 참 잘했어요!'],
+    [-2, '구름', '산책', '공원에서 강아지를 봤다. 낙엽을 세 개나 주웠다.', '걸음마다 좋은 것을 찾아냈네!'],
+    [-1, '비', '비 오는 날', '우산 위로 빗방울이 톡톡 소리를 냈다. 장화 신고 물웅덩이를 밟았다.', '빗소리를 듣는 다희의 귀가 참 예쁘구나.']
+  ];
+  const idx = {}, ent = {};
+  for (const [off, w, s, body, say] of S) {
+    const d = at(off);
+    idx[d] = { w, s, t: say };
+    ent[d] = { title: s, body, img: null, teacher: say, weather: w };
+  }
+  return { index: idx, entries: ent };
+}
+
+function enterApp(demo) {
+  $('lock').classList.add('hidden');
+  $('app').classList.remove('hidden');
+  if (demo) { INDEX = demo.index; ENTRY = demo.entries; $('demoBar').classList.remove('hidden'); }
+  initDiary();
+  renderAll();
+}
+function renderAll() { renderHeader(); renderCal(); renderHall(); }
+function monthCount(y, m) {
+  const pre = y + '-' + pad(m + 1) + '-';
+  const s = new Set();
+  for (const k in INDEX) if (k.indexOf(pre) === 0) s.add(dateOf(k));
+  return s.size;
+}
+function streakCount() {
+  let n = 0; const d = new Date();
+  const has = x => keysOf(ymd(x)).length > 0;
+  if (!has(d)) d.setDate(d.getDate() - 1);
+  while (has(d)) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+function renderHeader() {
+  const d = new Date();
+  const wk = ['일','월','화','수','목','금','토'][d.getDay()];
+  $('bigDate').innerHTML = '그림일기<small>' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + wk + ')</small>';
+  const s = streakCount();
+  $('meta').textContent = (s > 0 ? '연속 ' + s + '일' : '오늘부터 다시 시작') + ' · 이번 달 ' + monthCount(d.getFullYear(), d.getMonth()) + '/' + daysIn(d.getFullYear(), d.getMonth());
+}
+
+function initDiary() {
+  $('dDate').value = cur;
+  $('dDate').onchange = e => { if (e.target.value) loadDay(keysOf(e.target.value)[0] || e.target.value); };
+  $('weatherStamps').innerHTML = WEATHER.map(([n, e]) => '<button class="wbtn" data-w="' + n + '" title="' + n + '" aria-label="' + n + '">' + e + '</button>').join('');
+  $('weatherStamps').querySelectorAll('.wbtn').forEach(b => b.onclick = () => { weather = b.dataset.w; paintWeather(); });
+  loadDay(cur);
+}
+function paintWeather() {
+  $('weatherStamps').querySelectorAll('.wbtn').forEach(b => b.classList.toggle('on', b.dataset.w === weather));
+}
+function paintFrame() {
+  $('picBox').innerHTML = picData
+    ? '<img alt="그림" src="' + picData + '">'
+    : '<span>그림올리기를 누르면 사진을 고를 수 있어요</span>';
+}
+function fitTeacher() {
+  const el = $('teacherSay');
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+function paintTeacher(text) {
+  $('teacherSay').value = text || '';
+  fitTeacher();
+}
+$('teacherSay').addEventListener('input', fitTeacher);
+function paintDayTabs() {
+  const d = dateOf(cur);
+  const list = keysOf(d);
+  if (!list.includes(cur)) list.push(cur);
+  let h = list.length > 1 ? list.map((k, i) => '<button data-k="' + k + '" class="' + (k === cur ? 'on' : '') + '">일기 ' + (i + 1) + '</button>').join('') : '';
+  h += '<button data-new="1">+ 새 일기</button>';
+  $('dayTabs').innerHTML = h;
+  $('dayTabs').querySelectorAll('button').forEach(b => b.onclick = () => {
+    if (b.dataset.new) loadDay(nextKey(d)); else loadDay(b.dataset.k);
+  });
+}
+async function loadDay(k) {
+  cur = k;
+  const d = dateOf(k);
+  $('dDate').value = d;
+  $('question').textContent = qOf(d);
+  const meta = INDEX[k] || null;
+  weather = meta ? meta.w : null; paintWeather();
+  paintTeacher(meta && meta.t ? meta.t : '');
+  paintDayTabs();
+  let ent = ENTRY[k];
+  if (!ent && meta && !DEMO && KEY) {
+    try { const box = await loadRepoJSON('data/entries/' + k + '.enc.json'); if (box) { ent = await decJSON(box); ENTRY[k] = ent; } }
+    catch (e) { msg('그날 일기를 불러오지 못했어요'); }
+  }
+  if (cur !== k) return;
+  $('dTitle').value = ent ? ent.title || '' : '';
+  $('body').value = ent ? ent.body || '' : '';
+  picData = ent && ent.img ? ent.img : null;
+  paintFrame();
+}
+
+$('btnPaint').onclick = () => $('picFile').click();
+$('picFile').onchange = async () => {
+  const f = $('picFile').files && $('picFile').files[0];
+  $('picFile').value = '';
+  if (!f) return;
+  msg('사진을 줄이고 있어요...');
+  try {
+    const src = await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(f); });
+    picData = await shrinkDataUrl(src, 800);
+    paintFrame();
+    msg('사진을 넣었어요. 저장하기를 눌러 주세요.');
+  } catch (e) { msg('사진을 읽지 못했어요. 다른 사진을 골라 주세요'); }
+};
+
+$('btnTeacher').onclick = async () => {
+  const text = $('body').value.trim();
+  if (!text) { msg('일기를 먼저 적어 주세요'); return; }
+  if (DEMO) { msg('데모에서는 선생님 글을 새로 쓰지 않아요'); return; }
+  const sec = await loadSecrets();
+  if (sec.bad) { msg('설정에서 키를 다시 넣어 주세요(PIN이 달라졌을 수 있어요)'); return; }
+  if (!sec.g) { msg('제미나이 키가 없어요. 설정에서 넣어 주세요.'); return; }
+  msg('선생님이 읽고 있어요...');
+  try {
+    const prompt = '너는 초등학생의 다정한 담임 선생님이야. 따뜻하고 격려하는 한 문장(40자 이내)을 써줘. 설명 없이 한 줄만 답해.\n\n일기:\n' + text.slice(0, 1500);
+    const res = await geminiText(prompt, sec.g);
+    const line = (((res.candidates || [])[0] || {}).content || {}).parts;
+    const out = line && line[0] && line[0].text ? line[0].text.trim().split('\n')[0] : '';
+    if (!out) throw new Error('empty');
+    paintTeacher(out);
+    msg('선생님 한 줄을 적었어요. 저장하기를 누르면 남아요.');
+  } catch (e) { msg(explain(e, '선생님')); }
+};
+
+async function saveDiary(withImg) {
+  if (DEMO) { msg('데모 모드에서는 저장되지 않아요'); return; }
+  const body = $('body').value.trim();
+  if (!body) { msg('일기를 먼저 적어 주세요'); return; }
+  const sec = await loadSecrets();
+  if (sec.bad) { msg('설정에서 키를 다시 넣어 주세요(PIN이 달라졌을 수 있어요)'); return; }
+  if (sec.t) GH_TOKEN = sec.t;
+  if (!sec.t) { msg('GitHub 토큰이 없어요. 설정에서 넣어 주세요.'); return; }
+  if (!PIN_IN_MEM) { msg('PIN을 다시 열어 주세요'); return; }
+  const key = cur;
+  msg('저장 중이에요...');
+  try {
+    if (!SALT) {
+      const saltBytes = crypto.getRandomValues(new Uint8Array(16));
+      KEY = await deriveKey(PIN_IN_MEM, saltBytes);
+      SALT = { salt: b64(saltBytes) };
+      await ghPut('data/salt.json', JSON.stringify(SALT), sec.t, await ghSha('data/salt.json', sec.t));
+      await ghPut('data/check.enc.json', JSON.stringify(await encJSON({ ok: 1 })), sec.t, await ghSha('data/check.enc.json', sec.t));
+    }
+    if (!KEY) { msg('PIN을 다시 열어 주세요'); return; }
+    const title = $('dTitle').value.trim();
+    const p = { title, body, img: withImg ? picData : null, teacher: $('teacherSay').value.trim() || '', weather };
+    let thumb = '';
+    if (p.img) { try { thumb = await shrinkDataUrl(p.img, 120); } catch (e) { thumb = ''; } }
+    const entPath = 'data/entries/' + key + '.enc.json';
+    await ghPut(entPath, JSON.stringify(await encJSON(p)), sec.t, await ghSha(entPath, sec.t));
+    ENTRY[key] = p;
+    INDEX[key] = { w: weather || '', s: title || firstLine(body), t: p.teacher, i: thumb };
+    try {
+      const box = await loadRepoJSON('data/index.enc.json');
+      if (box) { const fresh = await decJSON(box); if (fresh && typeof fresh === 'object') INDEX = Object.assign({}, fresh, INDEX); }
+    } catch (e) {}
+    await ghPut('data/index.enc.json', JSON.stringify(await encJSON(INDEX)), sec.t, await ghSha('data/index.enc.json', sec.t));
+    msg('저장했어요.');
+    renderAll();
+    paintDayTabs();
+  } catch (e) { msg('저장이 잘 안 됐어요. 토큰과 연결을 확인해 주세요'); }
+}
+$('btnSave').onclick = () => saveDiary(true);
+
+function wrapLines(g, text, maxW) {
+  const out = [];
+  for (const para of String(text).split('\n')) {
+    let line = '';
+    for (const ch of para) {
+      const t = line + ch;
+      if (g.measureText(t).width > maxW) { out.push(line); line = ch; } else line = t;
+    }
+    out.push(line);
+  }
+  return out;
+}
+async function makePng(dayS, bodyText, wName, img, say, title) {
+  const c = document.createElement('canvas');
+  c.width = 780; c.height = 1040;
+  const g = c.getContext('2d');
+  g.fillStyle = '#fffef8'; g.fillRect(0, 0, c.width, c.height);
+  const ruleYs = [];
+  for (let y = 600; y <= 990; y += 44) ruleYs.push(y);
+  g.strokeStyle = '#dfe9f2'; g.lineWidth = 2;
+  ruleYs.forEach(y => { g.beginPath(); g.moveTo(0, y); g.lineTo(c.width, y); g.stroke(); });
+  g.fillStyle = '#5b4b63'; g.font = '34px sans-serif';
+  g.fillText(dayS + '  ' + (wName || ''), 40, 70);
+  if (title) { g.font = '30px sans-serif'; g.fillText(title.slice(0, 30), 40, 115); }
+  if (img) {
+    await new Promise(res => {
+      const im = new Image();
+      im.onload = () => {
+        const k = Math.min(660 / im.width, 400 / im.height);
+        const w = im.width * k, h = im.height * k;
+        g.drawImage(im, 60 + (660 - w) / 2, 140 + (400 - h) / 2, w, h);
+        res();
+      };
+      im.onerror = res;
+      im.src = img;
+    });
+  }
+  g.fillStyle = '#5b4b63'; g.font = '30px sans-serif';
+  const lines = wrapLines(g, bodyText || '', 640);
+  lines.slice(0, ruleYs.length).forEach((ln, i) => g.fillText(ln, 60, ruleYs[i] - 10));
+  if (say) { g.fillStyle = '#e2473c'; g.font = 'bold 28px sans-serif'; g.fillText('선생님: ' + say, 40, 1028); }
+  const a = document.createElement('a');
+  a.download = 'diary-' + dayS + '.png';
+  a.href = c.toDataURL('image/png');
+  a.click();
+}
+
+function renderCal() {
+  const y = calY, m = calM;
+  $('monthTitle').textContent = y + '년 ' + (m + 1) + '월';
+  const first = new Date(y, m, 1).getDay(), days = daysIn(y, m);
+  const todayS = ymd(new Date());
+  const dset = new Set(Object.keys(INDEX).map(dateOf));
+  let h = ['일','월','화','수','목','금','토'].map((x, i) => '<div class="dow' + (i === 0 ? ' sun' : '') + '">' + x + '</div>').join('');
+  for (let i = 0; i < first; i++) h += '<div></div>';
+  let cnt = 0;
+  for (let d = 1; d <= days; d++) {
+    const ds = y + '-' + pad(m + 1) + '-' + pad(d);
+    const has = dset.has(ds);
+    if (has) cnt++;
+    h += '<button class="day' + (has ? ' has' : '') + (ds === todayS ? ' today' : '') + '" data-d="' + ds + '">' + d + '</button>';
+  }
+  $('calGrid').innerHTML = h;
+  $('calGrid').querySelectorAll('button.day').forEach(b => b.onclick = () => openDay(keysOf(b.dataset.d)[0] || b.dataset.d));
+  $('grapeCnt').textContent = '참 잘했어요 포도송이 · 이번 달 ' + cnt + ' / ' + days;
+  $('bunch').innerHTML = Array.from({ length: days }, (_, i) => '<span class="grape' + (i < cnt ? ' on' : '') + '"></span>').join('');
+}
+$('prevM').onclick = () => { calM--; if (calM < 0) { calM = 11; calY--; } renderCal(); };
+$('nextM').onclick = () => { calM++; if (calM > 11) { calM = 0; calY++; } renderCal(); };
+
+function hallCard(k) {
+  const m = INDEX[k] || {};
+  const sf = sufOf(k) > 1 ? ' · ' + sufOf(k) + '번째' : '';
+  return '<div class="card" data-d="' + k + '"><div class="th">' + (m.i ? '<img alt="" src="' + m.i + '">' : '') + '</div><div class="ct"><div class="d">' + dateOf(k) + sf + ' · ' + esc(m.w || '') + '</div><div class="s">' + esc(m.s || '(제목 없음)') + '</div><div class="t">' + esc(m.t || '선생님 한 줄이 아직 없어요') + '</div></div></div>';
+}
+let hallBusy = false;
+async function fillThumbs() {
+  if (hallBusy || DEMO || !KEY) return;
+  hallBusy = true;
+  try {
+    for (const k of Object.keys(INDEX)) {
+      const m = INDEX[k];
+      if (!m || m.i !== undefined) continue;
+      let ent = ENTRY[k];
+      if (!ent) {
+        try { const box = await loadRepoJSON('data/entries/' + k + '.enc.json'); if (box) { ent = await decJSON(box); ENTRY[k] = ent; } }
+        catch (e) { continue; }
+      }
+      let t = '';
+      if (ent && ent.img) { try { t = await shrinkDataUrl(ent.img, 120); } catch (e) { t = ''; } }
+      m.i = t;
+      const th = $('hallList').querySelector('.card[data-d="' + k + '"] .th');
+      if (th && t) th.innerHTML = '<img alt="" src="' + t + '">';
+    }
+  } finally { hallBusy = false; }
+}
+async function refreshIndex() {
+  if (DEMO || !KEY) return false;
+  try {
+    const box = await loadRepoJSON('data/index.enc.json');
+    if (!box) return false;
+    const idx = await decJSON(box);
+    if (idx && typeof idx === 'object') { INDEX = idx; return true; }
+  } catch (e) {}
+  return false;
+}
+function renderHall() {
+  const keys = Object.keys(INDEX).sort((a, b) => dateOf(a) === dateOf(b) ? sufOf(b) - sufOf(a) : (dateOf(a) < dateOf(b) ? 1 : -1));
+  $('hallList').innerHTML = keys.length ? keys.map(hallCard).join('') : '<p class="hint">아직 쓴 일기가 없어요.</p>';
+  $('hallList').querySelectorAll('.card').forEach(c => c.onclick = () => openDay(c.dataset.d));
+  fillThumbs();
+}
+
+async function openDay(k) {
+  let ent = ENTRY[k];
+  if (!ent && INDEX[k] && !DEMO && KEY) {
+    try { const box = await loadRepoJSON('data/entries/' + k + '.enc.json'); if (box) { ent = await decJSON(box); ENTRY[k] = ent; } } catch (e) {}
+  }
+  const d = dateOf(k);
+  const m = INDEX[k] || {};
+  const body = ent ? (ent.body || '') : (m.s || '');
+  const img = ent && ent.img;
+  const title = ent && ent.title ? ent.title : (m.s || '');
+  const say = ent && ent.teacher ? ent.teacher : (m.t || '');
+  const sibs = keysOf(d);
+  const sibHtml = sibs.length > 1 ? '<div class="pact" style="margin:0 0 8px">' + sibs.map((x, i) => '<button class="sib' + (x === k ? ' on' : '') + '" data-k="' + x + '">일기 ' + (i + 1) + '</button>').join('') + '</div>' : '';
+  $('popBody').innerHTML = '<div class="pp">' + sibHtml + '<div class="dt">' + esc(d) + ' · ' + esc(m.w || '') + ' · ' + esc(title) + '</div><div class="pimg">' + (img ? '<img alt="그림" src="' + img + '">' : '이 날은 그림이 없어요') + '</div><div class="ro">' + esc(body) + '</div>' + (say ? '<div class="say">' + esc(say) + '</div>' : '') + '<div class="pact"><button id="popEdit">수정</button><button id="popImg">그림일기 이미지 저장</button></div></div>';
+  $('popBody').querySelectorAll('button.sib').forEach(b => b.onclick = () => openDay(b.dataset.k));
+  $('popEdit').onclick = () => { $('popup').classList.add('hidden'); tab(0); loadDay(k); };
+  $('popImg').onclick = () => makePng(d, body, m.w || '', img, say, title);
+  $('popup').classList.remove('hidden');
+}
+$('popClose').onclick = () => $('popup').classList.add('hidden');
+$('popup').onclick = e => { if (e.target.id === 'popup') $('popup').classList.add('hidden'); };
+
+function tab(n) {
+  ['diary','cal','hall'].forEach((k, i) => { $('tab-' + k).classList.toggle('hidden', i !== n); $('t' + (i + 1)).classList.toggle('on', i === n); });
+  if (n === 1) renderCal();
+  if (n === 2) { renderHall(); refreshIndex().then(ok => { if (ok) { renderHall(); renderHeader(); } }); }
+  window.scrollTo(0, 0);
+}
+$('t1').onclick = () => tab(0);
+$('t2').onclick = () => tab(1);
+$('t3').onclick = () => tab(2);
+
+$('gearBtn').onclick = async () => {
+  $('settings').classList.remove('hidden');
+  const s = await loadSecrets();
+  $('geminiKey').value = s.g || '';
+  $('ghToken').value = s.t || '';
+  $('setMsg').textContent = PIN_IN_MEM ? '' : 'PIN을 먼저 열어 주세요';
+};
+$('setClose').onclick = () => $('settings').classList.add('hidden');
+$('setSave').onclick = async () => {
+  if (!PIN_IN_MEM) { $('setMsg').textContent = 'PIN을 먼저 열어 주세요'; return; }
+  await saveSecrets($('geminiKey').value.trim(), $('ghToken').value.trim());
+  GH_TOKEN = $('ghToken').value.trim() || null;
+  await saveLocalCheck(PIN_IN_MEM);
+  $('setMsg').textContent = 'PIN으로 잠가 이 폰에 저장했어요';
+};
+
+$('resetBtn').onclick = () => {
+  if (!window.confirm('이 폰에 저장된 키·토큰·PIN 확인값을 지울까요? 저장소의 일기는 그대로 남아요.')) return;
+  localStorage.removeItem('diary_secrets');
+  localStorage.removeItem('diary_local_check');
+  PIN_IN_MEM = null;
+  $('pin').value = ''; $('pin2').value = ''; $('pin2').classList.add('hidden');
+  $('lockNote').textContent = '이 폰의 잠금 정보를 지웠어요. 다시 PIN을 정해 주세요';
+};
+$('unlockBtn').onclick = unlock;
+$('pin').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+
+if (DEMO) { PIN_IN_MEM = null; enterApp(demoData()); }
+})();
+</script>
+<script>
+(() => {
+'use strict';
+// 암호 변경: 현재 PIN으로 data/ 를 풀고 새 암호로 다시 잠가 한 커밋으로 올린다.
+const OWNER = 'yeoj00n', REPO = 'my-picture-diary-data', BRANCH = 'main';
+const ITER = 200000;
+const MIN_NEW = 12;
+let RK_TOK = null;
+const API = 'https://api.github.com/repos/' + OWNER + '/' + REPO;
+const ALLOWED = /^data\/(salt\.json|check\.enc\.json|index\.enc\.json|entries\/[^/]+\.enc\.json)$/;
+const enc = new TextEncoder(), dec = new TextDecoder();
+const $ = id => document.getElementById(id);
+const b64 = buf => { const u = new Uint8Array(buf); let s = ''; for (let i = 0; i < u.length; i++) s += String.fromCharCode(u[i]); return btoa(s); };
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+let PLAN = null;
+
+function say(t) { $('rkMsg').textContent = t; }
+function setApply(on) { $('rkApply').disabled = !on; }
+function fail(code) { const e = new Error(code); e.code = code; return e; }
+function errText(e) {
+  const c = e && e.code;
+  if (c === 'pin') return '현재 PIN이 맞지 않아요. 아무것도 바꾸지 않았어요.';
+  if (c === 'stale') return '저장소가 그 사이 바뀌었어요. 확인만 하기를 다시 눌러 주세요. 아무것도 올리지 않았어요.';
+  if (c === 'decrypt') return '일부 기록을 풀 수 없어요. 중단했고 아무것도 올리지 않았어요.';
+  if (c === 'missing') return '저장소 데이터 파일이 없어요. 중단했어요.';
+  if (c === 'unexpected') return 'data/ 에 예상하지 못한 파일이 있어요. 중단했어요.';
+  if (c === 'token') return '데이터 저장소 토큰이 필요해요. 아래 칸에 넣고 다시 확인만 하기를 눌러 주세요.';
+  return '확인이 실패했어요(연결이나 GitHub 응답을 확인해 주세요). 아무것도 올리지 않았어요.';
+}
+
+async function deriveKey(pin, salt) {
+  const base = await crypto.subtle.importKey('raw', enc.encode(pin), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: ITER, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+async function encBox(key, obj) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(JSON.stringify(obj)));
+  return { v: 1, iv: b64(iv), ct: b64(ct) };
+}
+async function decBox(key, box) {
+  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(box.iv) }, key, unb64(box.ct));
+  return JSON.parse(dec.decode(pt));
+}
+// git blob sha 계산: 저장소 파일이 트리 기록과 같은지 확인하는 데 쓴다
+async function gitSha(text) {
+  const body = enc.encode(text);
+  const head = enc.encode('blob ' + body.length + '\0');
+  const all = new Uint8Array(head.length + body.length);
+  all.set(head); all.set(body, head.length);
+  const d = await crypto.subtle.digest('SHA-1', all);
+  return Array.from(new Uint8Array(d)).map(x => x.toString(16).padStart(2, '0')).join('');
+}
+async function rawText(path, sha) {
+  const r = await fetch(API + '/contents/' + path + '?ref=' + BRANCH, { cache: 'no-store', headers: { Authorization: 'Bearer ' + RK_TOK, Accept: 'application/vnd.github.raw+json' } });
+  if (!r.ok) throw fail('missing');
+  const text = await r.text();
+  if (sha && (await gitSha(text)) !== sha) throw fail('stale');
+  return text;
+}
+async function ghJSON(path, opts, token) {
+  const h = { Accept: 'application/vnd.github+json' };
+  if (token) h.Authorization = 'Bearer ' + token;
+  if (opts && opts.body) h['Content-Type'] = 'application/json';
+  const r = await fetch(API + path, Object.assign({}, opts || {}, { headers: h }));
+  if (!r.ok) throw new Error('gh ' + r.status);
+  return r.json();
+}
+// data/ 의 파일 목록과 기록 sha
+async function listData(token) {
+  const j = await ghJSON('/git/trees/' + BRANCH + '?recursive=1', null, token);
+  if (j.truncated) throw new Error('truncated');
+  const out = {};
+  for (const e of j.tree) {
+    if (e.type !== 'blob' || !e.path.startsWith('data/')) continue;
+    if (!ALLOWED.test(e.path)) throw fail('unexpected');
+    out[e.path] = e.sha;
+  }
+  return out;
+}
+
+// 저장된 키·토큰(diary_secrets)을 옛 PIN 으로 읽는다
+async function readSecrets(oldPin) {
+  const raw = localStorage.getItem('diary_secrets');
+  if (!raw) return { secrets: null, ok: true };
+  try {
+    const o = JSON.parse(raw);
+    const k = await deriveKey(oldPin, unb64(o.salt));
+    const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(o.iv) }, k, unb64(o.ct));
+    return { secrets: JSON.parse(dec.decode(pt)), ok: true };
+  } catch (e) { return { secrets: null, ok: false }; }
+}
+
+// 확인만 하기: 저장소는 읽기만 한다
+async function buildPlan(oldPin, newPin) {
+  const pre = await readSecrets(oldPin);
+  const tok = (pre.secrets && pre.secrets.t) || $('rkTok').value.trim();
+  if (!tok) throw fail('token');
+  RK_TOK = tok;
+  const shas = await listData(tok);
+  if (!shas['data/salt.json'] || !shas['data/check.enc.json']) throw fail('missing');
+  const saltJ = JSON.parse(await rawText('data/salt.json', shas['data/salt.json']));
+  const oldKey = await deriveKey(oldPin, unb64(saltJ.salt));
+  const checkBox = JSON.parse(await rawText('data/check.enc.json', shas['data/check.enc.json']));
+  try { await decBox(oldKey, checkBox); } catch (e) { throw fail('pin'); }
+
+  const plain = {};
+  try {
+    plain['data/index.enc.json'] = shas['data/index.enc.json']
+      ? await decBox(oldKey, JSON.parse(await rawText('data/index.enc.json', shas['data/index.enc.json'])))
+      : {};
+    const ents = Object.keys(shas).filter(p => p.startsWith('data/entries/'));
+    for (const p of ents) plain[p] = await decBox(oldKey, JSON.parse(await rawText(p, shas[p])));
+  } catch (e) { if (e.code) throw e; throw fail('decrypt'); }
+  const ents = Object.keys(plain).filter(p => p.startsWith('data/entries/'));
+
+  // 새 키로 전부 다시 잠그기
+  const newSalt = crypto.getRandomValues(new Uint8Array(16));
+  const newKey = await deriveKey(newPin, newSalt);
+  const files = {};
+  files['data/salt.json'] = JSON.stringify({ salt: b64(newSalt) });
+  files['data/check.enc.json'] = JSON.stringify(await encBox(newKey, { ok: 1 }));
+  files['data/index.enc.json'] = JSON.stringify(await encBox(newKey, plain['data/index.enc.json']));
+  for (const p of ents) files[p] = JSON.stringify(await encBox(newKey, plain[p]));
+
+  // 왕복 검증: 새 파일을 새 PIN으로 다시 풀어 원래 내용과 같은지, 옛 PIN은 거부되는지
+  const k2 = await deriveKey(newPin, unb64(JSON.parse(files['data/salt.json']).salt));
+  try { await decBox(oldKey, JSON.parse(files['data/check.enc.json'])); throw fail('verify'); } catch (e) { if (e.code === 'verify') throw e; }
+  await decBox(k2, JSON.parse(files['data/check.enc.json']));
+  for (const p of Object.keys(files)) {
+    if (p === 'data/salt.json') continue;
+    const back = await decBox(k2, JSON.parse(files[p]));
+    const orig = p === 'data/check.enc.json' ? { ok: 1 } : plain[p];
+    if (JSON.stringify(back) !== JSON.stringify(orig)) throw fail('verify');
+  }
+
+  const sec = await readSecrets(oldPin);
+  const secrets = sec.secrets;
+  return {
+    shas, files, newPin, secrets,
+    token: tok,
+    secretsFound: !!localStorage.getItem('diary_secrets'),
+    secretsOk: sec.ok,
+    counts: { index: Object.keys(plain['data/index.enc.json']).length, entries: ents.length, files: Object.keys(files).length }
+  };
+}
+
+async function dryRun() {
+  PLAN = null; setApply(false);
+  const oldPin = $('rkOld').value.trim();
+  const n1 = $('rkNew1').value, n2 = $('rkNew2').value;
+  if (oldPin.length < 4) return say('현재 PIN 을 넣어 주세요');
+  if (n1.length < MIN_NEW) return say('새 암호는 12자 이상이어야 해요');
+  if (n1 !== n2) return say('새 암호 두 번이 달라요');
+  if (n1 === oldPin) return say('새 암호가 현재 PIN과 같아요');
+  say('확인하고 있어요... (저장소는 건드리지 않아요)');
+  try {
+    PLAN = await buildPlan(oldPin, n1);
+    const c = PLAN.counts;
+    let t = '확인 통과. 항목 ' + c.index + '개, 기록 ' + c.entries + '개, 파일 ' + c.files + '개를 새 암호로 다시 잠글 수 있어요. 저장소는 아직 건드리지 않았어요.';
+    if (!PLAN.secretsOk) t += '\n저장된 키·토큰은 옛 PIN으로 풀리지 않아요. 적용 후 다시 입력해 주세요.';
+    if (!PLAN.token) t += '\nGitHub 토큰이 저장돼 있지 않아요. 아래 칸에 넣어 주세요.';
+    $('rkTokWrap').style.display = PLAN.token ? 'none' : 'block';
+    say(t);
+    setApply(true);
+  } catch (e) {
+    PLAN = null;
+    if (e.code === 'token') $('rkTokWrap').style.display = 'block';
+    say(errText(e));
+  }
+}
+
+async function writeLocal(plan, token) {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const k = await deriveKey(plan.newPin, salt);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, k, enc.encode(JSON.stringify({ ok: 'diary' })));
+  localStorage.setItem('diary_local_check', JSON.stringify({ salt: b64(salt), iv: b64(iv), ct: b64(ct) }));
+  if (plan.secretsFound || token) {
+    const s = { g: (plan.secrets && plan.secrets.g) || '', t: token || '' };
+    const salt2 = crypto.getRandomValues(new Uint8Array(16));
+    const k2 = await deriveKey(plan.newPin, salt2);
+    const iv2 = crypto.getRandomValues(new Uint8Array(12));
+    const ct2 = await crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv2 }, k2, enc.encode(JSON.stringify(s)));
+    localStorage.setItem('diary_secrets', JSON.stringify({ salt: b64(salt2), iv: b64(iv2), ct: b64(ct2) }));
+  }
+}
+
+async function apply() {
+  if (!PLAN) return;
+  const plan = PLAN;
+  const token = plan.token || $('rkTok').value.trim();
+  if (!token) return say('GitHub 토큰을 넣어 주세요');
+  if (!window.confirm('저장소의 일기 데이터를 새 암호로 다시 잠가 한 번에 올릴까요? 진행 후에는 새 암호로만 열려요.')) return;
+  setApply(false);
+  say('올리고 있어요...');
+  try {
+    // 확인 이후 저장소가 바뀌었으면 중단
+    const now = await listData(token);
+    const keys = Object.keys(plan.shas);
+    if (keys.length !== Object.keys(now).length || keys.some(k => now[k] !== plan.shas[k])) throw fail('stale');
+    const head = (await ghJSON('/git/ref/heads/' + BRANCH, null, token)).object.sha;
+    const base = await ghJSON('/git/commits/' + head, null, token);
+    const entries = [];
+    for (const p of Object.keys(plan.files)) {
+      const b = await ghJSON('/git/blobs', { method: 'POST', body: JSON.stringify({ content: plan.files[p], encoding: 'utf-8' }) }, token);
+      entries.push({ path: p, mode: '100644', type: 'blob', sha: b.sha });
+    }
+    const tree = await ghJSON('/git/trees', { method: 'POST', body: JSON.stringify({ base_tree: base.tree.sha, tree: entries }) }, token);
+    const commit = await ghJSON('/git/commits', { method: 'POST', body: JSON.stringify({ message: 'chore: rekey diary data', tree: tree.sha, parents: [head] }) }, token);
+    // 이 한 줄이 성공해야만 적용된다(실패하면 위의 파일은 어디에도 연결되지 않는다)
+    await ghJSON('/git/refs/heads/' + BRANCH, { method: 'PATCH', body: JSON.stringify({ sha: commit.sha, force: false }) }, token);
+    PLAN = null;
+    try { await writeLocal(plan, token); } catch (e) { say('저장소 적용은 끝났어요. 이 폰의 잠금 정보 갱신만 실패했어요. 새로고침 후 키·토큰을 다시 넣어 주세요.'); return; }
+    say('적용 완료: 저장소에 한 커밋으로 올렸어요. 페이지를 새로고침하고 새 암호로 열어 보세요.');
+  } catch (e) {
+    PLAN = null;
+    say(errText(e));
+  }
+}
+
+function inject() {
+  const box = document.querySelector('#settings .box');
+  if (!box || $('rkDry')) return;
+  const wrap = document.createElement('div');
+  wrap.id = 'rk';
+  wrap.style.marginTop = '24px';
+  wrap.innerHTML =
+    '<h3>암호 변경</h3>' +
+    '<div class="note">현재 PIN과 새 암호(12자 이상)를 넣어요. 먼저 확인만 하기로 검사하고, 통과하면 적용을 눌러요.</div>' +
+    '<input id="rkOld" class="field" type="password" placeholder="현재 PIN">' +
+    '<input id="rkNew1" class="field" type="password" placeholder="새 암호 (12자 이상)">' +
+    '<input id="rkNew2" class="field" type="password" placeholder="새 암호 한 번 더">' +
+    '<div id="rkTokWrap" style="display:none"><input id="rkTok" class="field" type="password" placeholder="GitHub 토큰"></div>' +
+    '<button class="setbtn" id="rkDry">확인만 하기</button> ' +
+    '<button class="setbtn" id="rkApply" disabled>적용</button>' +
+    '<div class="msg" id="rkMsg"></div>';
+  box.appendChild(wrap);
+  $('rkDry').addEventListener('click', dryRun);
+  $('rkApply').addEventListener('click', apply);
+  ['rkOld', 'rkNew1', 'rkNew2', 'rkTok'].forEach(id => $(id).addEventListener('input', () => { PLAN = null; setApply(false); }));
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', inject);
+else inject();
+})();
+</script>
+</body>
+</html>
