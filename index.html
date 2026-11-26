@@ -118,6 +118,7 @@ textarea.say{width:100%;border:none;background:transparent;outline:none;resize:n
   <div id="lockTokWrap" class="hidden"><div class="note">데이터 저장소 토큰을 입력해야 열 수 있어요 (이 폰에 비밀번호로 잠가 저장돼요)</div><input id="lockTok" class="pin" style="font-size:14px" type="password" placeholder="데이터 저장소 토큰"></div>
   <button class="lbtn" id="unlockBtn">열기</button>
   <div class="msg" id="lockNote"></div>
+  <div class="msg" id="lockWait"></div>
   <div><button class="reset" id="resetBtn">이 폰의 잠금 초기화</button></div>
 </section>
 
@@ -401,9 +402,74 @@ async function saveLocalCheck(pin) {
   localStorage.setItem('diary_local_check', JSON.stringify({ salt: b64(salt), iv: b64(iv), ct: b64(ct) }));
 }
 function lockFail(t) { PIN_IN_MEM = null; KEY = null; $('lockNote').textContent = t; }
+// 틀린 비밀번호 대기 (작업 정리 잠금과 같은 표). 틀린 횟수 n 과 대기 시각은 localStorage 에 둬서 새로고침해도 유지.
+const LOCK_FAIL_KEY = 'diary_lock_fail_v1';
+const LOCK_WAITS_MS = [2000, 5000, 15000, 60000, 60000, 300000, 600000, 1800000, 3600000, 7200000, 14400000, 28800000, 86400000];
+const LOCK_RESET_MS = 7 * 24 * 60 * 60 * 1000;
+let LOCK_TIMER = null;
+function lockGetFails() {
+  let f = { n: 0, until: 0, last: 0 };
+  try {
+    const s = JSON.parse(localStorage.getItem(LOCK_FAIL_KEY) || 'null');
+    if (s && typeof s.n === 'number') f = { n: s.n, until: Number(s.until) || 0, last: Number(s.last) || 0 };
+  } catch (e) {}
+  if (f.n > 0 && Date.now() - f.last > LOCK_RESET_MS) f = { n: 0, until: 0, last: 0 };
+  return f;
+}
+function lockSetFails(f) { try { localStorage.setItem(LOCK_FAIL_KEY, JSON.stringify(f)); } catch (e) {} }
+function lockWaitText(sec) {
+  sec = Math.max(1, Math.ceil(sec));
+  let txt;
+  if (sec >= 3600) {
+    const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60);
+    txt = h + '시간' + (m ? ' ' + m + '분' : '');
+  } else if (sec >= 60) {
+    const mm = Math.floor(sec / 60), ss = sec % 60;
+    txt = mm + '분' + (ss ? ' ' + ss + '초' : '');
+  } else {
+    txt = sec + '초';
+  }
+  return txt + ' 뒤에 다시 입력할 수 있어요';
+}
+function lockSetEnabled(on) { $('pin').disabled = !on; $('unlockBtn').disabled = !on; }
+function lockRefresh() {
+  const f = lockGetFails();
+  const left = f.until - Date.now();
+  if (f.until && left > 0) {
+    lockSetEnabled(false);
+    $('lockWait').textContent = lockWaitText(left / 1000);
+    if (!LOCK_TIMER) {
+      LOCK_TIMER = setInterval(() => {
+        const l = lockGetFails().until - Date.now();
+        if (l <= 0) {
+          clearInterval(LOCK_TIMER); LOCK_TIMER = null;
+          lockSetEnabled(true);
+          $('lockWait').textContent = '';
+          $('pin').focus();
+        } else {
+          $('lockWait').textContent = lockWaitText(l / 1000);
+        }
+      }, 500);
+    }
+  } else {
+    // 대기는 끝났지만 틀린 횟수 n 은 그대로 둔다.
+    if (f.until) lockSetFails({ n: f.n, until: 0, last: f.last });
+    lockSetEnabled(true);
+    $('lockWait').textContent = '';
+  }
+}
+function lockWrong() {
+  lockFail('앗, 비밀번호가 달라요 🥲');
+  const f = lockGetFails();
+  const n = (f.n || 0) + 1;
+  const wait = LOCK_WAITS_MS[Math.min(n, LOCK_WAITS_MS.length) - 1];
+  lockSetFails({ n: n, until: Date.now() + wait, last: Date.now() });
+  lockRefresh();
+}
 let REPO_AUTH_BAD = false;
 async function unlock() {
   REPO_AUTH_BAD = false;
+  if (lockGetFails().until > Date.now()) { lockRefresh(); return; }
   const pin = $('pin').value.trim();
   if (!/^.{4,64}$/.test(pin)) { $('lockNote').textContent = '4자 이상으로 넣어 주세요'; return; }
   $('lockNote').textContent = '확인하고 있어요...';
@@ -412,10 +478,10 @@ async function unlock() {
   PIN_IN_MEM = pin;
   try {
     if (lc) {
-      if (!(await verifyLocal(pin, lc))) { lockFail('앗, 비밀번호가 달라요 🥲'); return; }
+      if (!(await verifyLocal(pin, lc))) { lockWrong(); return; }
     } else if (hasSecrets) {
       const s = await loadSecrets();
-      if (s.bad) { lockFail('앗, 비밀번호가 달라요 🥲'); return; }
+      if (s.bad) { lockWrong(); return; }
       if (s.t) GH_TOKEN = s.t;
       await saveLocalCheck(pin);
     }
@@ -460,7 +526,7 @@ async function unlock() {
     }
     KEY = await deriveKey(pin, unb64(SALT.salt));
     const check = await loadRepoJSON('data/check.enc.json');
-    if (check) { try { await decJSON(check); } catch (e) { lockFail('앗, 비밀번호가 달라요 🥲'); return; } }
+    if (check) { try { await decJSON(check); } catch (e) { lockWrong(); return; } }
     if (!lc && !hasSecrets) await saveLocalCheck(pin);
     const idx = await loadRepoJSON('data/index.enc.json');
     INDEX = idx ? await decJSON(idx) : {};
@@ -809,7 +875,7 @@ $('setSave').onclick = async () => {
 };
 
 $('resetBtn').onclick = () => {
-  if (!window.confirm('이 폰에 저장된 키·토큰·비밀번호 확인값을 지울까요? 저장소의 일기는 그대로 남아요.')) return;
+  if (!window.confirm('이 폰에 저장된 키·토큰·비밀번호 확인값을 지울까요? 저장소의 일기는 그대로 남아요.\n틀린 비밀번호로 인한 대기 시간은 그대로 유지돼요.')) return;
   localStorage.removeItem('diary_secrets');
   localStorage.removeItem('diary_local_check');
   PIN_IN_MEM = null;
@@ -819,6 +885,7 @@ $('resetBtn').onclick = () => {
 $('unlockBtn').onclick = unlock;
 $('pin').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
 
+lockRefresh();
 if (DEMO) { PIN_IN_MEM = null; enterApp(demoData()); }
 })();
 </script>
