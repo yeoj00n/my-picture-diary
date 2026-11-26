@@ -519,6 +519,7 @@ async function unlock() {
       }
       KEY = null; INDEX = {}; $('lockNote').textContent = '';
       await persistTok(typedTok);
+      lockSetFails({ n: 0, until: 0, last: 0 });
       enterApp();
       msg('비밀번호 설정 대기 중이에요. 처음 저장할 때 이 비밀번호로 잠가요.');
       $('diaryMsg').style.fontSize = '12px';
@@ -532,6 +533,7 @@ async function unlock() {
     INDEX = idx ? await decJSON(idx) : {};
     await persistTok(typedTok);
     $('lockNote').textContent = '';
+    lockSetFails({ n: 0, until: 0, last: 0 });
     enterApp();
   } catch (e) { lockFail('앗, 불러오기가 잘 안 됐어요. 잠시 후 다시 해 봐요'); }
 }
